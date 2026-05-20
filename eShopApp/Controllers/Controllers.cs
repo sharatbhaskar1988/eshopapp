@@ -35,7 +35,24 @@ public class CartController : Controller
         _db = db;
     }
 
-    private string SessionId => HttpContext.Session.Id;
+    private string SessionId
+    {
+        get
+        {
+            var id = HttpContext.Request.Cookies["cart_id"];
+            if (string.IsNullOrEmpty(id))
+            {
+                id = Guid.NewGuid().ToString();
+                HttpContext.Response.Cookies.Append("cart_id", id, new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddDays(7),
+                    HttpOnly = true,
+                    IsEssential = true
+                });
+            }
+            return id;
+        }
+    }
 
     public async Task<IActionResult> Index()
     {
@@ -88,7 +105,24 @@ public class CheckoutController : Controller
         _orderService = orderService;
     }
 
-    private string SessionId => HttpContext.Session.Id;
+    private string SessionId
+    {
+        get
+        {
+            var id = HttpContext.Request.Cookies["cart_id"];
+            if (string.IsNullOrEmpty(id))
+            {
+                id = Guid.NewGuid().ToString();
+                HttpContext.Response.Cookies.Append("cart_id", id, new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddDays(7),
+                    HttpOnly = true,
+                    IsEssential = true
+                });
+            }
+            return id;
+        }
+    }
 
     public async Task<IActionResult> Index()
     {
@@ -132,11 +166,9 @@ public class HealthController : Controller
         _db = db;
     }
 
-    // Liveness probe — App zinda hai?
     [HttpGet("/health/live")]
     public IActionResult Live() => Ok(new { status = "Alive", timestamp = DateTime.UtcNow });
 
-    // Readiness probe — DB connected hai?
     [HttpGet("/health/ready")]
     public async Task<IActionResult> Ready()
     {
