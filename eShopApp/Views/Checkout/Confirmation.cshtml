@@ -1,0 +1,49 @@
+@model eShopApp.Models.Order
+@{
+    ViewData["Title"] = "Order Confirmed";
+}
+
+<div class="text-center py-5">
+    <div class="mb-4">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+    </div>
+    <h1 class="text-success">Order Successfully Placed! 🎉</h1>
+    <p class="lead text-muted">Thank you for your purchase, <strong>@Model.CustomerName</strong>!</p>
+
+    <div class="card mx-auto mt-4" style="max-width: 500px;">
+        <div class="card-body">
+            <table class="table table-borderless mb-0">
+                <tr>
+                    <td class="text-muted">Order Number</td>
+                    <td><strong class="text-primary">@Model.OrderNumber</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Order Date</td>
+                    <td>@Model.OrderDate.ToString("dd MMM yyyy HH:mm")</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Email</td>
+                    <td>@Model.CustomerEmail</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Total Amount</td>
+                    <td><strong class="text-success">€@Model.TotalAmount.ToString("F2")</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Status</td>
+                    <td><span class="badge bg-warning">@Model.Status</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="alert alert-info mx-auto mt-4" style="max-width: 500px;">
+        <i class="bi bi-info-circle"></i>
+        Your order has been sent to our processing queue via <strong>Azure Service Bus</strong>.
+        You will receive a confirmation email shortly.
+    </div>
+
+    <a href="/" class="btn btn-dark btn-lg mt-3">
+        <i class="bi bi-house"></i> Continue Shopping
+    </a>
+</div>

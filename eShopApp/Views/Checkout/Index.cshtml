@@ -1,0 +1,86 @@
+@model eShopApp.Models.CheckoutViewModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2 class="mb-4">💳 Checkout</h2>
+
+<div class="row">
+    <!-- Payment Form -->
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Customer & Payment Details</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/Checkout/PlaceOrder">
+                    <h6 class="text-muted mb-3">👤 Customer Information</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="CustomerName" class="form-control"
+                               placeholder="John Doe" required />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="CustomerEmail" class="form-control"
+                               placeholder="john@example.com" required />
+                    </div>
+
+                    <hr />
+                    <h6 class="text-muted mb-3">💳 Payment Details <span class="badge bg-warning text-dark">Demo Only</span></h6>
+
+                    <div class="mb-3">
+                        <label class="form-label">Card Number</label>
+                        <input type="text" name="CardNumber" class="form-control"
+                               placeholder="1234 5678 9012 3456" maxlength="19" required />
+                        <div class="form-text">Use any fake number for demo</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="text" name="CardExpiry" class="form-control"
+                                   placeholder="MM/YY" maxlength="5" required />
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">CVV</label>
+                            <input type="text" name="CardCvv" class="form-control"
+                                   placeholder="123" maxlength="3" required />
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Demo Mode:</strong> No real payment will be charged.
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg w-100">
+                        <i class="bi bi-lock"></i> Place Order — €@Model.TotalAmount.ToString("F2")
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Order Summary</h5>
+            </div>
+            <div class="card-body">
+                @foreach (var item in Model.CartItems)
+                {
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>@item.ProductName x@item.Quantity</span>
+                        <strong>€@item.Total.ToString("F2")</strong>
+                    </div>
+                }
+                <hr />
+                <div class="d-flex justify-content-between">
+                    <h5>Total</h5>
+                    <h5 class="text-success">€@Model.TotalAmount.ToString("F2")</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+@model List<eShopApp.Models.CartItem>
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<h2 class="mb-4">🛒 Your Cart</h2>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="bi bi-cart-x" style="font-size: 4rem; color: #ccc;"></i>
+        <h4 class="mt-3 text-muted">Your cart is empty!</h4>
+        <a href="/" class="btn btn-dark mt-3">Continue Shopping</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><strong>@item.ProductName</strong></td>
+                        <td>€@item.Price.ToString("F2")</td>
+                        <td>
+                            <form method="post" action="/Cart/UpdateQuantity" class="d-flex align-items-center gap-2">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" max="99"
+                                       class="form-control" style="width:80px;" />
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
+                            </form>
+                        </td>
+                        <td><strong>€@item.Total.ToString("F2")</strong></td>
+                        <td>
+                            <form method="post" action="/Cart/Remove">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="table-dark">
+                    <td colspan="3"><strong>Total Amount</strong></td>
+                    <td colspan="2"><strong>€@Model.Sum(x => x.Total).ToString("F2")</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between mt-3">
+        <a href="/" class="btn btn-outline-dark">
+            <i class="bi bi-arrow-left"></i> Continue Shopping
+        </a>
+        <a href="/Checkout" class="btn btn-success btn-lg">
+            Proceed to Checkout <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+}
